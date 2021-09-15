@@ -13,7 +13,20 @@ class AppController extends AbstractController{
      */
     public function home(): Response
     {
-        return $this->render("app/home.html.twig");
+        return $this->render("app/home.html.twig", [
+            'name' => 'Adolphe',
+            'nationalité' => 'Belge',
+        ]
+    
+        );
+    }
+
+    /**
+     * @Route("/test")
+     */
+    public function front(): Response
+    {
+        return $this->render("app/test.twig");
     }
 }
 

@@ -1,5 +1,20 @@
-{% extends "base.html.twig" %}
+{% extends "front_layout.twig" %}
 
-{% block body %}
-<H1 style="margin:100px;text-align:center;background-color:blue;color:red;">Bonjour tout le monde !</H1>
+{% block content %}
+<H1 class="titre">Bonjour tout le monde, je suis {{name|reverse}} et je suis {{nationalité|upper}}</H1>
+<div style="text-align:center">
+    <p> Test FontAwesome : <i class="fas fa-smile fa-5x" style="color:green"></i> <i class="fas fa-smile fa-6x" style="color:yellow"></i> <i class="fas fa-smile fa-7x" style="color:red"></i><p></p> <i class="fab fa-accessible-icon fa-10x fa-spin"></i> <i class="fab fa-accessible-icon fa-10x fa-flip-vertical"></i>
+    <div class="fa-4x">
+    <i class="fas fa-snowboarding"></i>
+    <i class="fas fa-snowboarding fa-rotate-90"></i>
+    <i class="fas fa-snowboarding fa-rotate-180"></i>
+    <i class="fas fa-snowboarding fa-rotate-270"></i>
+    <i class="fas fa-snowboarding fa-flip-horizontal"></i>
+    <i class="fas fa-snowboarding fa-flip-vertical"></i>
+    <i class="fas fa-snowboarding fa-flip-both"></i>
+    <i class="fas fa-snowboarding fa-flip-both fa-spin"></i>
+
+    </div>
+</div>
+
 {% endblock %}
