@@ -45,6 +45,10 @@ use Doctrine\ORM\Mapping as ORM;
        * @ORM\Column(type="datetime")
        */
       private $createdAt;
+      public function __construct()
+      {
+           $this->createdAt = new \DateTime();   
+      }
 
         /**
          * Get the value of id
