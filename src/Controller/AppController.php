@@ -20,14 +20,6 @@ class AppController extends AbstractController{
     
         );
     }
-
-    /**
-     * @Route("/test")
-     */
-    public function front(): Response
-    {
-        return $this->render("app/test.twig");
-    }
 }
 
 ?>
