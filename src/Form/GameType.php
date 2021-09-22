@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Game;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -12,10 +13,23 @@ class GameType extends AbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('content')
-            ->add('enabled')
-            ->add('createdAt')
+            ->add('title', null, [
+                'label' => "Titre du jeu"
+            ])
+            ->add('content', null, [
+                'label' => "Description du jeu",
+                'attr' => [
+                    "rows" => 4
+                ]
+            ])
+            ->add('enabled', ChoiceType::class, [
+                'label' => "Publié",
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'expanded' => true,
+            ])
         ;
     }
 

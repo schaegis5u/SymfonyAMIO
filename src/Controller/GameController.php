@@ -43,10 +43,32 @@ class GameController extends AbstractController{
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($gameEntity); //Préparer requête
             $entityManager->flush(); //Executer requête
+
+            return $this->redirectToRoute('app_game_list');
         }
 
         return $this->render("game/new.html.twig", [
             'form' => $form->createView(), //Envoyer vue formulaire dans vue twig
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit")
+     */
+    public function edit(EntityManagerInterface $entityManager, Game $entity, Request $request): Response
+    {
+        $form = $this->createForm(GameType::class, $entity);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($entity); //Préparer requête
+            $entityManager->flush(); //Executer requête
+
+            return $this->redirectToRoute('app_game_list');
+        }
+
+        return $this->render("game/edit.html.twig", [
+            'form' => $form->createView(),
         ]);
     }
 }

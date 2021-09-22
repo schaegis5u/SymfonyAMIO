@@ -2,7 +2,21 @@
 
 {% block content %}
 <h1> Liste des jeux </h1>
+<div class="d-flex justify-content-start mb-2">
+    <a href="{{ path('app_game_new')}}" class="btn btn-success">Nouveau jeu ?</a>
+</div>
+<ul class="list-group">
+{% for object in entities %}
+    <li class="list-group-item">
+        <div class="d-flex justify-content-between">
+            <h5>{{object.title}}</a></h5>
+            <a class="btn btn-light" href="/game/{{object.id}}/edit"><i class="fas fa-edit"></i></a>
+        </div>
 
-{{ dump(entities) }}
+    </li>
+{% endfor %}
+
+{# {{ dump(entities) }} #}
+</ul>
 
 {% endblock %}
