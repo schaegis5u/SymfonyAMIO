@@ -1,0 +1,16 @@
+game:
+  title: Titre du jeu
+  content: Description du jeu
+  enabled: Publié
+  yes: Oui
+  no: Non
+  edit:
+    title: Editer un jeu
+    success: Le jeu "%game%" a bien été modifié
+  new:
+    title: Ajouter un jeu
+    success: Le jeu "%game%" a bien été ajouté
+  delete:
+    title: Supprimer un jeu
+    message: Voulez-vous vraiment supprimer le jeu "%game%" ?
+    success: Le jeu "%game%" a bien été supprimé

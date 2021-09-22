@@ -14,19 +14,19 @@ class GameType extends AbstractType{
     {
         $builder
             ->add('title', null, [
-                'label' => "Titre du jeu"
+                'label' => 'game.title'
             ])
             ->add('content', null, [
-                'label' => "Description du jeu",
+                'label' => 'game.content',
                 'attr' => [
                     "rows" => 4
                 ]
             ])
             ->add('enabled', ChoiceType::class, [
-                'label' => "Publié",
+                'label' => 'game.enabled',
                 'choices' => [
-                    'Oui' => true,
-                    'Non' => false,
+                    'game.yes' => true,
+                    'game.no' => false,
                 ],
                 'expanded' => true,
             ])

@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/game")
@@ -31,7 +33,7 @@ class GameController extends AbstractController{
     /**
      * @Route("/new")
      */
-    public function new(EntityManagerInterface $entityManager, Request $request) : Response {
+    public function new(EntityManagerInterface $entityManager, Request $request, TranslatorInterface $translatorInterface) : Response {
         //EMI est un objet crée par Symfony pour nous
         $gameEntity = new Game;
         // Création formulaire avec classe GameType
@@ -44,6 +46,7 @@ class GameController extends AbstractController{
             $entityManager->persist($gameEntity); //Préparer requête
             $entityManager->flush(); //Executer requête
 
+            $this->addFlash('success', $translatorInterface->trans("game.new.success", ["%game%" => $gameEntity->getTitle()]) );
             return $this->redirectToRoute('app_game_list');
         }
 
@@ -53,9 +56,9 @@ class GameController extends AbstractController{
     }
 
     /**
-     * @Route("/{id}/edit")
+     * @Route("/{id}/edit", requirements={"id":"\d+"})
      */
-    public function edit(EntityManagerInterface $entityManager, Game $entity, Request $request): Response
+    public function edit(EntityManagerInterface $entityManager, Game $entity, Request $request, TranslatorInterface $translatorInterface): Response
     {
         $form = $this->createForm(GameType::class, $entity);
 
@@ -64,11 +67,29 @@ class GameController extends AbstractController{
             $entityManager->persist($entity); //Préparer requête
             $entityManager->flush(); //Executer requête
 
+            $this->addFlash('success', $translatorInterface->trans("game.edit.success", ["%game%" => $entity->getTitle()]) );
             return $this->redirectToRoute('app_game_list');
         }
 
         return $this->render("game/edit.html.twig", [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete", requirements={"id":"\d+"})
+     */
+    public function delete(EntityManagerInterface $entityManager, Game $entity, Request $request, TranslatorInterface $translatorInterface): Response
+    {
+        if ($this->isCsrfTokenValid("delete".$entity->getId(), $request->get('token'))){
+            $entityManager->remove($entity);
+            $entityManager->flush(); //Executer requête
+
+            $this->addFlash('success', $translatorInterface->trans("game.delete.success", ["%game%" => $entity->getTitle()]) );
+            return $this->redirectToRoute('app_game_list');
+        }
+        return $this->render("game/delete.html.twig", [
+            'entity' => $entity,
         ]);
     }
 }
