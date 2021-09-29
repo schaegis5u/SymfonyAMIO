@@ -4,6 +4,14 @@
     <h1 style="margin-top:20px;margin-bottom:20px"> <b>Modifier un jeu</b></h1>
     <div style="width:35%">
         {% embed "decorator/_form.html.twig" %}
+            {% block formBody %}
+                {{ form_widget(form )}}
+
+                {# Affichage de l'img #}
+                {% if entity.image is not empty %}
+                    <img src="{{ asset(entity.image.webPath) }}" width="300px" alt="{{ entity.title }}">
+                {% endif %}
+            {% endblock %}
         {% endembed %}
     </div>
 {% endblock %}

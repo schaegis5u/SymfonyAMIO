@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'front_layout.twig' %}
 
 {% block title %}Support index{% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>Support index</h1>
 
     <table class="table">
@@ -23,8 +23,8 @@
                 <td>{{ support.constructor }}</td>
                 <td>{{ support.year }}</td>
                 <td>
-                    <a href="{{ path('support_show', {'id': support.id}) }}">show</a>
-                    <a href="{{ path('support_edit', {'id': support.id}) }}">edit</a>
+                    <a href="{{ path('support_show', {'id': support.id}) }}" class="btn btn-dark">Show</a>
+                    <a href="{{ path('support_edit', {'id': support.id}) }}" class="btn btn-info">Edit</a>
                 </td>
             </tr>
         {% else %}
@@ -35,5 +35,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('support_new') }}">Create new</a>
+    <a href="{{ path('support_new') }}" class="btn btn-secondary">Create new</a>
 {% endblock %}
