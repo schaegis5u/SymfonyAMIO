@@ -4,6 +4,7 @@ game:
   enabled: Publié
   yes: Oui
   no: Non
+  delete_image: Supprimer l'image
   edit:
     title: Editer un jeu
     success: Le jeu "%game%" a bien été modifié

@@ -53,13 +53,21 @@ use Doctrine\ORM\Mapping as ORM;
                         private $support;
       
                         /**
-                         * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"})
+                         * orphanRemoval indique que l'entité Image est supprimé s'il n'y a plus de co avec l'entité Game
+                         * @ORM\OneToOne(targetEntity=Image::class, cascade={"persist", "remove"}, orphanRemoval=true)
                          */
                         private $image;
+
+                        /**
+                         * @var bool
+                         */
+                        private $deleteImage = false;
+                        
                         public function __construct()
                         {
                              $this->createdAt = new \DateTime();   
                         }
+                        
                   
                           /**
                            * Get the value of id
@@ -190,4 +198,34 @@ use Doctrine\ORM\Mapping as ORM;
 
                               return $this;
                           }
+
+                        /**
+                         * Get the value of deleteImage
+                         *
+                         * @return  bool
+                         */ 
+                        public function getDeleteImage()
+                        {
+                                                return $this->deleteImage;
+                        }
+
+                        /**
+                         * Set the value of deleteImage
+                         *
+                         * @param  bool  $deleteImage
+                         *
+                         * @return  self
+                         */ 
+                        public function setDeleteImage(bool $deleteImage)
+                        {
+                                $this->deleteImage = $deleteImage;
+
+                                if ($deleteImage) {
+                                        $this->image = null;
+                                }
+
+                                return $this;
+                        }
+
+                
                    }

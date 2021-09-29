@@ -143,4 +143,15 @@ class Image
     {
         return 'uploads/'.$this->path;
     }
+
+     /**
+     * @ORM\PreRemove()
+     */
+    public function remove()
+    {
+        // Test si le fichier existe
+        if (is_file($this->getPublicRootDir().$this->path)) {
+            unlink($this->getPublicRootDir().$this->path);
+        }
+    }
 }
