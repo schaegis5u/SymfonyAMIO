@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\User;
 use App\Form\GameType;
 use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,10 +25,17 @@ class GameController extends AbstractController{
      */
 
     public function list(GameRepository $gameRepository): Response{
+        if ($this->getUser() instanceof User){
         $entities = $gameRepository->findAll(); // retourne tout les jeux
+        $count = $gameRepository->count([]);
+        } else { 
+            $entities = $gameRepository->findEnabled();
+            $count = $gameRepository->count(['enabled' => true]);
+        }
 
         return $this->render("game/list.html.twig", [
-            'entities' => $entities
+            'entities' => $entities,
+            'count' => $count,
         ]);
     }
 
