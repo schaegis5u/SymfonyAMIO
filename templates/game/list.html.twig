@@ -9,11 +9,19 @@
 {% for object in entities %}
     <li class="list-group-item">
         <div class="d-flex justify-content-between align-items-center">
-            <h5>({{object.id}}) {{object.title}}</a></h5>
+        {% if object.image is not empty %}
+        <img src={{ asset(object.image.webPath)}} alt="{{ object.title }}" style="max-width: 150px">
+        {% endif %}
+            <h5>{{object.title}}</a></h5>
+            {% if object.user is not empty %}
+            <div> {{object.user.username}}</div>
+            {% endif %}
             <span class="badge bg-info">{{object.support}}</span>
             <div>
+                {% if is_granted('EDIT', object) %}
                 <a class="btn btn-dark" href="/game/{{object.id}}/edit"><i class="fas fa-edit"></i></a>
                 <a class="btn btn-danger" href="/game/{{object.id}}/delete"><i class="fas fa-trash"></i></a>
+                {% endif %}
             </div>
         </div>
 

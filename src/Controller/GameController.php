@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/game")
@@ -32,10 +33,12 @@ class GameController extends AbstractController{
 
     /**
      * @Route("/new")
+     * @IsGranted("ROLE_USER")
      */
     public function new(EntityManagerInterface $entityManager, Request $request, TranslatorInterface $translatorInterface) : Response {
         //EMI est un objet crée par Symfony pour nous
         $gameEntity = new Game;
+        $gameEntity->setUser($this->getUser());
         // Création formulaire avec classe GameType
         $form = $this->createForm(GameType::class, $gameEntity);
 
@@ -57,9 +60,14 @@ class GameController extends AbstractController{
 
     /**
      * @Route("/{id}/edit", requirements={"id":"\d+"})
+     * @IsGranted("ROLE_USER")
      */
     public function edit(EntityManagerInterface $entityManager, Game $entity, Request $request, TranslatorInterface $translatorInterface): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $entity);
+        if (null === $entity->getUser()) {
+            $entity->setUser($this->getUser());
+        }
         $form = $this->createForm(GameType::class, $entity);
 
         $form->handleRequest($request);
@@ -79,6 +87,7 @@ class GameController extends AbstractController{
 
     /**
      * @Route("/{id}/delete", requirements={"id":"\d+"})
+     * @IsGranted("ROLE_USER")
      */
     public function delete(EntityManagerInterface $entityManager, Game $entity, Request $request, TranslatorInterface $translatorInterface): Response
     {
