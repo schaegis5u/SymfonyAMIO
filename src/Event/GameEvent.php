@@ -14,7 +14,7 @@ class GameEvent extends Event
 
     public function __construct(Game $game)
     {
-        return $this->game;
+        $this->game = $game;
     }
 
     
