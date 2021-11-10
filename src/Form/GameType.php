@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Game;
 use App\Entity\Support;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -43,6 +45,12 @@ class GameType extends AbstractType{
                     return $er->createQueryBuilder('s')
                         ->orderBy('s.year');
                 },
+            ])
+
+            ->add('categories', EntityType::class, [
+                'label' => 'game.categories',
+                'multiple' => true,
+                'class' => Category::class,
             ])
 
             //Ajout du formulaire ImageType

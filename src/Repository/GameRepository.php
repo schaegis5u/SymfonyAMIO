@@ -16,10 +16,11 @@ class GameRepository extends ServiceEntityRepository{
     public function findAll()
     {
         $qb = $this->createQueryBuilder('g')
-            ->addSelect('i, s, u')
+            ->addSelect('i, s, u, c')
             ->leftJoin('g.image', 'i')
             ->leftJoin('g.support', 's')
             ->leftJoin('g.user', 'u')
+            ->leftJoin('g.categories', 'c')
         ;
         return $qb->getQuery()->getResult();
     }
@@ -31,6 +32,7 @@ class GameRepository extends ServiceEntityRepository{
             ->leftJoin('g.image', 'i')
             ->leftJoin('g.support', 's')
             ->leftJoin('g.user', 'u')
+            ->leftJoin('g.categories', 'c')
             ->where('g.enabled = true')
         ;
         return $qb->getQuery()->getResult();
@@ -42,6 +44,7 @@ class GameRepository extends ServiceEntityRepository{
             ->leftJoin('g.image', 'i')
             ->leftJoin('g.support', 's')
             ->leftJoin('g.user', 'u')
+            ->leftJoin('g.categories', 'c')
             ->where('g.user = :user')
             ->setParameter(':user', $user)
         ;

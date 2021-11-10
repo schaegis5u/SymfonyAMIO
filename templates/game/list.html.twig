@@ -14,6 +14,7 @@
         <img src={{ asset(object.image.webPath)}} alt="{{ object.title }}" style="max-width: 150px">
         {% endif %}
             <h5>{{object.title}}</a></h5>
+            {# <h5>{{object.categories}}</a></h5> #}
             {% if object.user is not empty %}
             <div> {{object.user.username}}</div>
             {% endif %}

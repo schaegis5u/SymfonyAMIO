@@ -4,6 +4,7 @@ game:
   enabled: Publié
   yes: Oui
   no: Non
+  categories: Catégorie
   delete_image: Supprimer l'image
   edit:
     title: Editer un jeu

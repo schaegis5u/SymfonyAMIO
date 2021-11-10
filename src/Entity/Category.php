@@ -25,7 +25,7 @@ class Category
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Game::class, mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity=Game::class, mappedBy="categories", cascade={"all"}, orphanRemoval=true)
      */
     private $games;
 
@@ -76,5 +76,10 @@ class Category
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

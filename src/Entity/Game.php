@@ -71,7 +71,7 @@ use Doctrine\ORM\Mapping as ORM;
                              private $user;
             
                              /**
-                              * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="games")
+                              * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="games", orphanRemoval=true)
                               */
                              private $categories;
                              
@@ -219,7 +219,7 @@ use Doctrine\ORM\Mapping as ORM;
                              */ 
                              public function getDeleteImage()
                              {
-                                                     return $this->deleteImage;
+                                return $this->deleteImage;
                              }
                      
                              /**
@@ -274,6 +274,11 @@ use Doctrine\ORM\Mapping as ORM;
                                  $this->categories->removeElement($category);
 
                                  return $this;
+                             }
+
+                             public function __toString()
+                             {
+                                 return $this->title;
                              }
                      
                      
