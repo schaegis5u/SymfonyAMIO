@@ -37,9 +37,9 @@ use Doctrine\ORM\Mapping as ORM;
                              /**
                               * @var bool
                              * 
-                             * @ORM\Column(type="boolean")
+                             * @ORM\Column(type="boolean", options={"default"=1})
                              */
-                             private $enabled;
+                             private $enabled =true;
                      
                              /**
                               * @var \DateTime

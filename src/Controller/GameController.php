@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Game;
 use App\Entity\User;
+use App\Event\GameEvent;
+use App\Event\GameEvents;
 use App\Form\GameType;
 use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route("/game")
@@ -24,18 +28,25 @@ class GameController extends AbstractController{
      * @Route("/")
      */
 
-    public function list(GameRepository $gameRepository): Response{
-        if ($this->getUser() instanceof User){
+    public function list(GameRepository $gameRepository, Request $request): Response{
+        $page = $request->get('p',1);
+        $itemCount = 5;
+
+        /*if ($this->getUser() instanceof User){
         $entities = $gameRepository->findAll(); // retourne tout les jeux
         $count = $gameRepository->count([]);
         } else { 
             $entities = $gameRepository->findEnabled();
             $count = $gameRepository->count(['enabled' => true]);
-        }
+        }*/
+        $entities = $gameRepository->findPagination($page, $itemCount);
+
+        $pageCount = \ceil($entities->count() / $itemCount);
 
         return $this->render("game/list.html.twig", [
-            'entities' => $entities,
-            'count' => $count,
+            'entities' => $entities,//->getIterator(),
+            'count' => $entities->count(),
+            'pageCount' =>$pageCount,
         ]);
     }
 
@@ -43,7 +54,7 @@ class GameController extends AbstractController{
      * @Route("/new")
      * @IsGranted("ROLE_USER")
      */
-    public function new(EntityManagerInterface $entityManager, Request $request, TranslatorInterface $translatorInterface) : Response {
+    public function new(EntityManagerInterface $entityManager, Request $request, TranslatorInterface $translatorInterface, EventDispatcherInterface $eventDispatcher) : Response {
         //EMI est un objet crée par Symfony pour nous
         $gameEntity = new Game;
         $gameEntity->setUser($this->getUser());
@@ -56,6 +67,8 @@ class GameController extends AbstractController{
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($gameEntity); //Préparer requête
             $entityManager->flush(); //Executer requête
+
+            $eventDispatcher->dispatch(new GameEvent($gameEntity), GameEvents::GAME_ADDED);
 
             $this->addFlash('success', $translatorInterface->trans("game.new.success", ["%game%" => $gameEntity->getTitle()]) );
             return $this->redirectToRoute('app_game_list');

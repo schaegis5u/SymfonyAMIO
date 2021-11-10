@@ -40,6 +40,12 @@
                 {{ message }}
             </div>
         {% endfor %}#}
+        <div class="navbar navbar-light bg-light my-3 navbar-expand-lg">
+            <div class="container">
+                {{ knp_menu_render('main') }}
+                {{ knp_menu_render('user', {style: 'horizontal'}) }}
+            </div>
+        </div>
     {% block content %}{% endblock %}
     </div>
 </main>

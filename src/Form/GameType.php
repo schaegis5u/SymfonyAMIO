@@ -7,6 +7,7 @@ use App\Entity\Game;
 use App\Entity\Support;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\Entity;
+use Knp\Menu\FactoryInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -14,9 +15,19 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Choice;
 
+
 class GameType extends AbstractType{
+
+    private $security;
+
+    public function __construct(FactoryInterface $factory, Security $security /* private Security $security*/)
+    {
+        $this->security = $security; //PHP7
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -29,14 +40,6 @@ class GameType extends AbstractType{
                     "rows" => 4
                 ]
             ])
-            ->add('enabled', ChoiceType::class, [
-                'label' => 'game.enabled',
-                'choices' => [
-                    'game.yes' => true,
-                    'game.no' => false,
-                ],
-                'expanded' => true,
-            ])
             ->add('support', EntityType::class, [
                 'class' => Support::class,
                 'required' => false,
@@ -45,9 +48,20 @@ class GameType extends AbstractType{
                     return $er->createQueryBuilder('s')
                         ->orderBy('s.year');
                 },
-            ])
+            ]);
 
-            ->add('categories', EntityType::class, [
+            if ($this->security->isGranted('ROLE_ADMIN')) {
+                $builder->add('enabled', ChoiceType::class, [
+                    'label' => 'game.enabled',
+                    'choices' => [
+                        'game.yes' => true,
+                        'game.no' => false,
+                    ],
+                    'expanded' => true,
+                ]);
+            }
+
+            $builder->add('categories', EntityType::class, [
                 'label' => 'game.categories',
                 'multiple' => true,
                 'class' => Category::class,
@@ -61,6 +75,9 @@ class GameType extends AbstractType{
                 'required' => false,
             ])
         ;
+
+        
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

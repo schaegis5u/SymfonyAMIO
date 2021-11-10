@@ -49,6 +49,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $games;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Login::class, mappedBy="user")
+     */
+    private $logins;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();

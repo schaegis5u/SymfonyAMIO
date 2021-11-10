@@ -12,3 +12,14 @@ $primary: rgb(98, 25, 192);
     background-color:blue;
     color:red;
 }
+
+.menu-register > .nav-link {
+    font-weight: bold;
+    background-color: $primary;
+    color: white !important;
+}
+
+.menu-email > .nav-link {
+    font-weight: italic;
+    color: $primary !important;
+}
