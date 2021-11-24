@@ -32,7 +32,7 @@
                 <a class="btn btn-dark" href="/game/{{object.id}}/edit"><i class="fas fa-edit"></i></a>
                 <a class="btn btn-danger" href="/game/{{object.id}}/delete"><i class="fas fa-trash"></i></a>
                 {% endif %}
-                <a href="{{ path('app_game_like', {'id': object.id}) }}" class="btn btn-warning position-relative">
+                <a href="{{ path('app_game_like', {'id': object.id}) }}" class="btn-like btn btn-warning position-relative">
                 <i class="fas fa-star"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {{ object.likes|length }}

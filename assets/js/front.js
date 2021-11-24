@@ -47,4 +47,27 @@ tinymce.init({
         });
 
     }
+
+    for (const btn of document.querySelectorAll('.btn-like')) {
+        btn.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            let xhttp = new XMLHttpRequest;
+            xhttp.open('GET', btn.getAttribute('href'));
+
+            xhttp.onload = () => {
+                let json = JSON.parse(xhttp.responseText);
+
+                if (json.status === 'success') {
+                    btn.classList.toggle('active', json.active);
+
+                    btn.querySelector('span').innerHTML = (parseInt(btn.querySelector('span').innerHTML) + (json.active ? 1 : -1));
+                }
+            };
+
+            xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+            xhttp.send();
+        });
+    }
 });

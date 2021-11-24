@@ -19,6 +19,7 @@ use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -131,10 +132,11 @@ class GameController extends AbstractController{
      * @Route("/{id}/like", requirements={"id":"\d+"})
      * @IsGranted("ROLE_USER")
      */
-    public function like(Game $entity, LikeRepository $likeRepository, EntityManagerInterface $entityManager): Response
+    public function like(Game $entity, LikeRepository $likeRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $user = $this->getUser();
         $like = $likeRepository->findOneByUserAndGame($user, $entity);
+        $active = true;
 
         if (null === $like)
         {
@@ -147,10 +149,19 @@ class GameController extends AbstractController{
             $entityManager->persist($like);
 
         } else {
+            $active = false;
             $entityManager->remove($like);
         }
 
         $entityManager->flush();
+
+        if ($request->isXmlHttpRequest())
+        {
+            return new JsonResponse([
+                'status' => 'success',
+                'active' => $active,
+            ]);
+        }
 
         return $this->redirectToRoute('app_game_list');
     }
