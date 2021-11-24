@@ -34,7 +34,7 @@ class GameType extends AbstractType{
             ->add('title', null, [
                 'label' => 'game.title'
             ])
-            ->add('content', null, [
+            ->add('content', WysiwygType::class, [
                 'label' => 'game.content',
                 'attr' => [
                     "rows" => 4

@@ -6,6 +6,10 @@ $primary: rgb(98, 25, 192);
 @import "node_modules/@fortawesome/fontawesome-free/scss/solid";
 @import "node_modules/@fortawesome/fontawesome-free/scss/brands";
 
+@import "node_modules/tinymce/skins/ui/oxide/skin";
+@import "node_modules/tinymce/skins/content/default/content";
+@import "node_modules/tinymce/skins/ui/oxide/content";
+
 .titre{
     margin:100px;
     text-align:center;

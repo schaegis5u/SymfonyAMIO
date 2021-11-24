@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\Like;
 use App\Entity\User;
 use App\Event\GameEvent;
 use App\Event\GameEvents;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Repository\LikeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +32,8 @@ class GameController extends AbstractController{
 
     public function list(GameRepository $gameRepository, Request $request): Response{
         $page = $request->get('p',1);
-        $itemCount = 5;
+        $itemCount = 10;
+        $search =$request->get('s', '');
 
         /*if ($this->getUser() instanceof User){
         $entities = $gameRepository->findAll(); // retourne tout les jeux
@@ -39,14 +42,14 @@ class GameController extends AbstractController{
             $entities = $gameRepository->findEnabled();
             $count = $gameRepository->count(['enabled' => true]);
         }*/
-        $entities = $gameRepository->findPagination($page, $itemCount);
+        $entities = $gameRepository->findPagination($page, $itemCount, $search);
 
         $pageCount = \ceil($entities->count() / $itemCount);
 
         return $this->render("game/list.html.twig", [
             'entities' => $entities,//->getIterator(),
             'count' => $entities->count(),
-            'pageCount' =>$pageCount,
+            'pageCount' =>max($pageCount, 1),
         ]);
     }
 
@@ -122,5 +125,33 @@ class GameController extends AbstractController{
         return $this->render("game/delete.html.twig", [
             'entity' => $entity,
         ]);
+    }
+
+    /**
+     * @Route("/{id}/like", requirements={"id":"\d+"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function like(Game $entity, LikeRepository $likeRepository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $like = $likeRepository->findOneByUserAndGame($user, $entity);
+
+        if (null === $like)
+        {
+            $like = (new Like)
+                ->setUser($user)
+                ->setGame($entity)
+                ->setDate(new \DateTime)
+            ;
+
+            $entityManager->persist($like);
+
+        } else {
+            $entityManager->remove($like);
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_game_list');
     }
 }

@@ -6,6 +6,7 @@ game:
   no: Non
   categories: Catégorie
   delete_image: Supprimer l'image
+  search: Chercher un jeu
   edit:
     title: Editer un jeu
     success: Le jeu "%game%" a bien été modifié
@@ -16,3 +17,5 @@ game:
     title: Supprimer un jeu
     message: Voulez-vous vraiment supprimer le jeu "%game%" ?
     success: Le jeu "%game%" a bien été supprimé
+user:
+  address: Adresse

@@ -26,7 +26,7 @@ class GameRepository extends ServiceEntityRepository{
         ;
     }
 
-    public function findPagination(int $page = 1, int $itemCount = 20): Paginator
+    public function findPagination(int $page = 1, int $itemCount = 20, string $search): Paginator
     {
         $begin = ($page - 1) * $itemCount;
 
@@ -34,6 +34,13 @@ class GameRepository extends ServiceEntityRepository{
             ->setMaxResults($itemCount)
             -> setFirstResult($begin)
             ;
+
+            if ('' !== $search)
+            {
+                $qb->where('g.title LIKE :search')
+                ->setParameter(':search', '%'.$search.'%')
+                ;
+            }
 
         $this->addJoin($qb);
 

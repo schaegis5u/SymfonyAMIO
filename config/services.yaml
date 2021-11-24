@@ -27,5 +27,6 @@ services:
         tags:
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main } # The alias is what is used to retrieve the menu
             - { name: knp_menu.menu_builder, method: createUserMenu, alias: user } # The alias is what is used to retrieve the menu
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
