@@ -26,6 +26,18 @@ class GameRepository extends ServiceEntityRepository{
         ;
     }
 
+    public function findBest(){
+        $qb = $this->createQueryBuilder('g')
+            ->addSelect('COUNT(1) AS like_count')
+            ->leftJoin('g.likes', 'l')
+            ->groupBy('g.id')
+            ->setMaxResults(1)
+            ->orderBy('like_count', 'DESC')
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function findPagination(int $page = 1, int $itemCount = 20, string $search): Paginator
     {
         $begin = ($page - 1) * $itemCount;
