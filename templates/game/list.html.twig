@@ -13,7 +13,11 @@
 <div class="d-flex justify-content-end mb-2">
     <a href="{{ path('app_game_new')}}" class="btn btn-info">Nouveau jeu ?</a>
 </div>
-<div> Il y a {{ count }} jeux </div>
+{% if count == 1 %}
+    <div> Il y a {{ count }} jeu </div>
+{% else %}
+    <div> Il y a {{ count }} jeux </div>
+{% endif %}
 <ul class="list-group">
 {% for object in entities %}
     <li class="list-group-item">
